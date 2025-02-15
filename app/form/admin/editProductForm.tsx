@@ -1,16 +1,14 @@
 import { withFormik } from "formik"
 import * as yup from 'yup'
 import ValidationError from "@/app/exceptions/validationError"
-import Router from "next/router"
-import { Dispatch } from "@reduxjs/toolkit"
-import { SetStateAction } from "react"
 import { CreateProductInterface } from "@/app/contracts/admin/product"
-import callApi from "@/app/helpers/callApi"
-import { CreateProduct, UpdateProduct } from "@/app/services/product"
+
+import { UpdateProduct } from "@/app/services/product"
 import { toast } from "react-toastify"
 import Product from "@/app/models/product"
 import InnerProductForm from "@/app/components/admin/products/innerProductForm"
 import { KeyedMutator } from "swr"
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
 
 const validateSchemaForm = yup.object().shape({
     title:yup.string().required().min(4).max(255),
@@ -21,6 +19,7 @@ const validateSchemaForm = yup.object().shape({
 
 interface editProductFormProps {
     product:Product,
+    router:AppRouterInstance,
     mutateProducts?:KeyedMutator<{
         products: any;
         total_page: any;
@@ -46,7 +45,7 @@ const EditProductForm = withFormik<editProductFormProps , CreateProductInterface
                 await props?.mutateProducts()
             }
 
-            Router.push('/admin/products')
+            props.router.push('/admin/products')
 
             toast.success('محصول مورد نظر با موفقیت ثبت شد.')
         } catch (error) {

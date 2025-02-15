@@ -1,11 +1,12 @@
-import AdminPanelLayout from "@/app/components/adminPanelLayout "
-import { NextPageWithLayout } from "@/pages/_app"
+'use client'
+
 import CreateProductForm from "@/app/form/admin/createProductForm"
+import { useRouter } from "next/navigation"
 
 
 
-const CreateProduct : NextPageWithLayout = () => {
-
+const CreateProduct = () => {
+    const router = useRouter()
     return (
         <>
             <div className="px-4 sm:px-6 lg:px-8">
@@ -18,7 +19,7 @@ const CreateProduct : NextPageWithLayout = () => {
                     <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
                         <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
                         {/* Form Product Create */}
-                        <CreateProductForm />
+                        <CreateProductForm router={router} />
                         </div>
                     </div>
                 </div>
@@ -26,7 +27,5 @@ const CreateProduct : NextPageWithLayout = () => {
         </>
     )
 }
-
-CreateProduct.getLayout = (page) => <AdminPanelLayout>{page}</AdminPanelLayout>
 
 export default CreateProduct

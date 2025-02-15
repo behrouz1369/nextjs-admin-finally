@@ -1,20 +1,14 @@
-import GuestLayout from "@/app/components/guestPanelLayout ";
-import LoginForm from "@/app/form/loginForm";
+'use client';
+
 import PhoneVerifyForm from "@/app/form/PhoneVerifyForm";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { selectToken, updateToken } from "@/app/store/slices/auth";
-import { NextPageWithLayout } from "@/pages/_app";
-import Router from "next/router";
-import { useEffect, useState } from "react";
-import { useCookies } from "react-cookie";
-import { useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 
-
-
-
-
-const PhoneVerify : NextPageWithLayout = () => {
+const PhoneVerify = () => {
+    const router = useRouter()
 
     const dispatch = useAppDispatch()
 
@@ -25,14 +19,12 @@ const PhoneVerify : NextPageWithLayout = () => {
     }
 
     useEffect(()=>{
-        Router.beforePopState(({ url, as, options }) => {
-            clearPhoneVerifyToken()
-
-            return true
-          })
-
         if(token === undefined){
-            Router.push('/auth/login')
+            router.push('/auth/login')
+        }
+
+        return () => {
+            clearPhoneVerifyToken()
         }
     },[token])
 
@@ -47,13 +39,11 @@ const PhoneVerify : NextPageWithLayout = () => {
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
 
                     {/* Form Login  setCookies={setCookies}*/}
-                    <PhoneVerifyForm token={token} clearToken={clearPhoneVerifyToken}/>
+                    <PhoneVerifyForm token={token} clearToken={clearPhoneVerifyToken} router={router} />
                 </div>
             </div>
         </>
     )
 }
-
-PhoneVerify.getLayout = (page) => <GuestLayout>{page}</GuestLayout>
 
 export default PhoneVerify

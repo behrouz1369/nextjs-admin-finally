@@ -1,14 +1,11 @@
 import { withFormik } from "formik"
 import * as yup from 'yup'
 import ValidationError from "@/app/exceptions/validationError"
-import Router from "next/router"
-import { Dispatch } from "@reduxjs/toolkit"
-import { SetStateAction } from "react"
 import InnerProductForm from "@/app/components/admin/products/innerProductForm"
 import { CreateProductInterface } from "@/app/contracts/admin/product"
-import callApi from "@/app/helpers/callApi"
 import { CreateProduct } from "@/app/services/product"
 import { toast } from "react-toastify"
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
 
 const validateSchemaForm = yup.object().shape({
     title:yup.string().required().min(4).max(255),
@@ -18,7 +15,7 @@ const validateSchemaForm = yup.object().shape({
 })
 
 interface createProductFormProps {
-
+    router: AppRouterInstance
 }
 
 const CreateProductForm = withFormik<createProductFormProps , CreateProductInterface>({
@@ -36,7 +33,7 @@ const CreateProductForm = withFormik<createProductFormProps , CreateProductInter
             // Create New Product By Api
             await CreateProduct(values)
 
-            Router.push('/admin/products')
+            props.router.push('/admin/products')
 
             toast.success('محصول مورد نظر با موفقیت ثبت شد.')
         } catch (error) {

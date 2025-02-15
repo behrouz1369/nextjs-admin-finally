@@ -15,7 +15,7 @@ const GuestLayout = ({children} : Props) => {
     const {user,error} = useAuth()
 
     if(user){
-        router.push('/panel')
+        router.push('/admin')
         return <></>
     }
 

@@ -1,14 +1,13 @@
-import { useRouter } from "next/router"
-import { ReactNode , Fragment , useState} from "react"
-import useAuth from "../hooks/useAuth"
-import {  Menu, Transition } from '@headlessui/react'
-import {
-    Bars3BottomLeftIcon,
-    BellIcon,
-  } from '@heroicons/react/24/outline'
-  import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
-import LayoutSidebar from "./admin/layouts/LayoutSideBar"
+'use client';
 
+import { Bars3BottomLeftIcon, BellIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import LayoutSidebar from "../components/admin/layouts/LayoutSideBar"
+import { Menu, Transition } from "@headlessui/react";
+import { useRouter } from "next/navigation";
+import useAuth from "../hooks/useAuth";
+import { useState } from "react";
+import Link from "next/link";
+import '@/styles/globals.css'
 
 
 const userNavigation = [
@@ -21,11 +20,12 @@ function classNames(...classes : string[]) {
     return classes.filter(Boolean).join(' ')
 }
 
-interface Props {
-    children: ReactNode
-}
+export default function BlogLayout({
+    children,
+  }: {
+    children: React.ReactNode
+  }) {
 
-const AdminPanelLayout = ({children} : Props) => {
     const router = useRouter()
 
     const {user , error , isLoading} = useAuth()
@@ -41,13 +41,10 @@ const AdminPanelLayout = ({children} : Props) => {
         router.push('/auth/login')
         return <></>
     }
-
-
-
     return(
         <>
             <div>
-                //Sidebar
+
                 <LayoutSidebar isOpen={sidebarOpen} setOpen={setSidebarOpen} />
 
 
@@ -100,7 +97,7 @@ const AdminPanelLayout = ({children} : Props) => {
                             </Menu.Button>
                         </div>
                         <Transition
-                            as={Fragment}
+                            // as={Fragment}
                             enter="transition ease-out duration-100"
                             enterFrom="transform opacity-0 scale-95"
                             enterTo="transform opacity-100 scale-100"
@@ -112,7 +109,7 @@ const AdminPanelLayout = ({children} : Props) => {
                             {userNavigation.map((item) => (
                                 <Menu.Item key={item.name}>
                                 {({ active }) => (
-                                    <a
+                                    <Link
                                     href={item.href}
                                     className={classNames(
                                         active ? 'bg-gray-100' : '',
@@ -120,7 +117,7 @@ const AdminPanelLayout = ({children} : Props) => {
                                     )}
                                     >
                                     {item.name}
-                                    </a>
+                                    </Link>
                                 )}
                                 </Menu.Item>
                             ))}
@@ -147,10 +144,7 @@ const AdminPanelLayout = ({children} : Props) => {
                     </div>
                 </main>
                 </div>
-            </div>
+                </div>
         </>
     )
-}
-
-
-export default AdminPanelLayout
+  }

@@ -3,11 +3,11 @@ import { registerValuesInterface } from "../contracts/auth"
 import * as yup from 'yup'
 import InnerRegisterForm from "../components/auth/innerRegisterForm"
 import callApi from "../helpers/callApi"
-import Router from "next/router"
 import ValidationError from "../exceptions/validationError"
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
 
 interface registerFormProps {
-
+    router : AppRouterInstance
 }
 
 const phoneRegExp = /^(0|0098|\+98)9(0[1-5]|[1-3]|d|2[0-2]|98)|d{7}$/
@@ -29,7 +29,7 @@ const RegisterForm = withFormik<registerFormProps , registerValuesInterface>({
        try {
         const res = await callApi().post('/auth/register' , values)
         if(res.status === 201){
-            Router.push('/auth/login')
+            props.router.push('/auth/login')
         }
        } catch (error) {
             if(error instanceof ValidationError){

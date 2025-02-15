@@ -1,21 +1,19 @@
-
-import AdminPanelLayout from "@/app/components/adminPanelLayout "
-import { NextPageWithLayout } from "@/pages/_app"
-import { useRouter } from "next/router"
-import CreateProductForm from "@/app/form/admin/createProductForm"
+'use client';
+import React from 'react'
+import { useParams, useRouter } from "next/navigation"
 import useSWR from "swr"
 import { GetSingleProduct } from "@/app/services/product"
-import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import ValidationError from "@/app/exceptions/validationError"
 import EditProductForm from "@/app/form/admin/editProductForm"
 
 
-const EditProduct : NextPageWithLayout = ({productId} : InferGetServerSidePropsType<typeof getServerSideProps>) => {
-    // const [ showAddProduct , setShowAddProduct ] = useState(false);
+const EditProduct = () => {
+    const params = useParams<{productId:any}>();
+
     const router = useRouter()
 
     //Get The Product With ProductId
-    const {data , error} = useSWR({url:`/admin/products/${productId}/edit`,productId} , GetSingleProduct)
+    const {data , error} = useSWR({url:`/admin/products/${params?.productId}/edit`,productId:params?.productId} , GetSingleProduct)
 
     const isLoading = !data && !error
 
@@ -39,7 +37,7 @@ const EditProduct : NextPageWithLayout = ({productId} : InferGetServerSidePropsT
                             {
                                 isLoading
                                     ? <span>Loading...</span>
-                                    : <EditProductForm product={data?.product}/>
+                                    : <EditProductForm product={data?.product} router={router} />
                             }
                         </div>
                     </div>
@@ -47,17 +45,6 @@ const EditProduct : NextPageWithLayout = ({productId} : InferGetServerSidePropsT
             </div>
         </>
     )
-}
-
-EditProduct.getLayout = (page) => <AdminPanelLayout>{page}</AdminPanelLayout>
-
-export const getServerSideProps : GetServerSideProps = async ({query}) => {
-
-    return {
-        props : {
-            productId : query?.productId
-        }
-    }
 }
 
 export default EditProduct

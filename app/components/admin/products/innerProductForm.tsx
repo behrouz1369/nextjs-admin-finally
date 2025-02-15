@@ -1,10 +1,9 @@
-
-
+'use client'
 
 import { loginValuesInterface } from "@/app/contracts/auth"
 import { Form, FormikProps } from "formik"
 import Input from "@/app/components/shared/form/input"
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation"
 import { CreateProductInterface } from "@/app/contracts/admin/product"
 import Textarea from "../../shared/form/textarea"
 import SelectBox from "../../shared/form/select"
@@ -12,7 +11,7 @@ import Product from "@/app/models/product"
 
 
 type ProductFormProps = FormikProps<CreateProductInterface> & {
-    product : Product
+    product? : Product
 }
 
 

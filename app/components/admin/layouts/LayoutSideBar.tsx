@@ -1,6 +1,6 @@
+'use client'
 
-
-import React, { ReactNode , Fragment , useState, SetStateAction} from "react"
+import React, { SetStateAction ,Fragment } from "react"
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
     Bars3BottomLeftIcon,
@@ -13,9 +13,8 @@ import {
     UsersIcon,
     XMarkIcon,
   } from '@heroicons/react/24/outline'
-import { useParams } from "next/navigation"
 import Link from "next/link"
-import { useRouter } from "next/router"
+import { usePathname, useRouter } from "next/navigation"
 
 
 interface Props{
@@ -27,7 +26,7 @@ interface Props{
 
 export default function LayoutSidebar({isOpen, setOpen} : Props) {
     const router = useRouter()
-    const path = router.pathname
+    const path = usePathname()
 
     const navigation = [
         { name: 'داشبورد', href: '/admin', icon: HomeIcon, current: (path === '/admin') ? true : false },

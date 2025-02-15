@@ -1,19 +1,16 @@
-import GuestLayout from "@/app/components/guestPanelLayout ";
+'use client';
+
 import LoginForm from "@/app/form/loginForm";
 import { useAppDispatch } from "@/app/hooks";
-import { AppDispatch } from "@/app/store";
+import useAuth from "@/app/hooks/useAuth";
 import { updateToken } from "@/app/store/slices/auth";
-import { NextPageWithLayout } from "@/pages/_app";
-import { useState } from "react";
-import { useCookies } from "react-cookie";
-import { useDispatch } from "react-redux";
+import { redirect, useRouter } from "next/navigation";
 
 
+const Login = () => {
+    const {user} = useAuth()
 
-
-
-
-const Login : NextPageWithLayout = () => {
+    const router = useRouter()
 
     // const [cookies , setCookies] = useCookies(['token-shopy'])
     const dispatch = useAppDispatch()
@@ -21,6 +18,10 @@ const Login : NextPageWithLayout = () => {
 
     const setPhoneVerifyToken = (token:string) => {
         dispatch(updateToken(token))
+    }
+
+    if(user){
+       redirect('/admin')
     }
 
     return(
@@ -34,13 +35,11 @@ const Login : NextPageWithLayout = () => {
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
 
                     {/* Form Login  setCookies={setCookies}*/}
-                    <LoginForm  setToken={setPhoneVerifyToken} />
+                    <LoginForm  setToken={setPhoneVerifyToken} router={router} />
                 </div>
             </div>
         </>
     )
 }
-
-Login.getLayout = (page) => <GuestLayout>{page}</GuestLayout>
 
 export default Login

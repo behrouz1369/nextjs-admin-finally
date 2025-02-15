@@ -1,14 +1,7 @@
-import AdminPanelLayout from "@/app/components/adminPanelLayout "
-import { NextPageWithLayout } from "@/pages/_app"
+'use client'
 
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
-import { Dialog } from '@headlessui/react'
 import { useEffect, useState } from "react"
 import Modal from "@/app/components/shared/form/Modal"
-import { Form, Formik } from "formik"
-import Input from "@/app/components/shared/form/input"
-import * as yup from 'yup'
-import { useRouter } from "next/router"
 import Link from "next/link"
 import CreateProductForm from "@/app/form/admin/createProductForm"
 import useSWR from "swr"
@@ -18,23 +11,22 @@ import LoadingBox from "@/app/components/shared/loadingBox"
 import ReactCustomPaginate from "@/app/components/shared/reactCustomPaginate"
 import EmptyList from "@/app/components/shared/emptyList"
 import ProductListItem from "@/app/components/admin/products/productListItem"
+import { useRouter, useSearchParams } from "next/navigation"
 
-const people = [
-    { name: 'Lindsay Walton', title: 'Front-end Developer', email: 'lindsay.walton@example.com', role: 'Member' },
-    // More people...
-]
-const ProductsPage : NextPageWithLayout = () => {
+
+const ProductsPage = () => {
     // const [ showAddProduct , setShowAddProduct ] = useState(false);
     const [page , setPage]= useState(1)
     const router = useRouter()
+    const path = useSearchParams()
 
-    const {page:queryPage} = router.query
+    const queryPage = path?.get('page') ?? 1
 
     const {data,error,mutate} = useSWR({url:'/admin/products' , page} , GetProduct)
     const isLoading = !data && !error
 
     useEffect(() => {
-        setPage(parseInt(queryPage ?? 1))
+        setPage(parseInt(queryPage))
     },[queryPage])
 
     const setShowCreateProductModal = (show:boolean)=>{
@@ -47,21 +39,18 @@ const ProductsPage : NextPageWithLayout = () => {
         <>
 
         {
-            `create-product` in router.query && <Modal
+            path?.has('create-product') && <Modal
                 setShow={setShowCreateProductModal}
             >
                 <div className="inline-block w-full max-w-3xl mt-8 mb-20 overflow-hidden text-right align-middle transition-all transform bg-white shadow-xl rounded-lg opacity-100 scale-100">
 
                     <h2 className="text-xl font-bold leading-tight text-gray-800 py-5 px-7  border-b">ساخت محصول</h2>
-                    <CreateProductForm />
+                    <CreateProductForm router={router} />
                 </div>
 
 
             </Modal>
         }
-
-
-
 
             <div className="px-4 sm:px-6 lg:px-8">
                 <div className="sm:flex sm:items-center">
@@ -126,7 +115,5 @@ const ProductsPage : NextPageWithLayout = () => {
         </>
     )
 }
-
-ProductsPage.getLayout = (page) => <AdminPanelLayout>{page}</AdminPanelLayout>
 
 export default ProductsPage

@@ -1,13 +1,11 @@
 import { withFormik } from "formik"
-import { loginValuesInterface, phoneVerifyValuesInterface } from "../contracts/auth"
+import { phoneVerifyValuesInterface } from "../contracts/auth"
 import * as yup from 'yup'
-import InnerRegisterForm from "../components/auth/innerRegisterForm"
-import InnerLoginForm from "../components/auth/innerLoginForm"
 import callApi from "../helpers/callApi"
 import ValidationError from "../exceptions/validationError"
-import Router from "next/router"
 import InnerPhoneVerifyForm from "../components/auth/innerPhoneVerifyForm"
 import { StoreLoginToken } from "../helpers/auth"
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
 
 const phoneRegExp = /^(0|0098|\+98)9(0[1-5]|[1-3]|d|2[0-2]|98)|d{7}$/
 
@@ -18,13 +16,15 @@ const validateSchemaForm = yup.object().shape({
 interface phoneVerifyFormProps {
     // setCookies:any
     token?:string,
-    clearToken:() => void
+    clearToken:() => void,
+    router:AppRouterInstance
 }
 
 const PhoneVerifyForm = withFormik<phoneVerifyFormProps , phoneVerifyValuesInterface>({
     mapPropsToValues : props => ({
         code:'',
-        token: props?.token ?? ''
+        token: props?.token ?? '',
+
     }),
 
     validationSchema : validateSchemaForm,
@@ -38,7 +38,7 @@ const PhoneVerifyForm = withFormik<phoneVerifyFormProps , phoneVerifyValuesInter
                 StoreLoginToken(res?.data?.user?.token)
 
                 // Redirect To Page Home
-                await Router.push('/admin')
+                await props.router.push('/admin')
 
                 // clear token phone verify from redux
                 props.clearToken()

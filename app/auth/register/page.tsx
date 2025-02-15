@@ -1,11 +1,12 @@
 import RegisterForm from "@/app/form/rigesterForm";
+import { useRouter } from "next/navigation";
 
 
 
 
 
 export default function Register() {
-
+    const router = useRouter()
     return(
         <>
             <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -17,7 +18,7 @@ export default function Register() {
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
 
                     {/* Form Register */}
-                    <RegisterForm />
+                    <RegisterForm router={router} />
                 </div>
             </div>
         </>

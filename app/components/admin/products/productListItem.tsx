@@ -1,7 +1,9 @@
+'use client'
+
 import Product from "@/app/models/product";
 import { useState } from "react";
 import DeleteConfirmation from "../../shared/deleteConfirmation";
-import callApi from "@/app/helpers/callApi";
+
 
 import { DeleteProduct } from "@/app/services/product";
 import { toast } from "react-toastify";
@@ -9,8 +11,8 @@ import ValidationError from "@/app/exceptions/validationError";
 import { KeyedMutator } from "swr";
 import Link from "next/link";
 import Modal from "../../shared/form/Modal";
-import { useRouter } from "next/router";
 import EditProductForm from "@/app/form/admin/editProductForm";
+import { useRouter } from "next/navigation";
 
 
 interface Props{
@@ -52,19 +54,19 @@ export default function ProductListItem({product,mutateProducts} : Props) {
             <tr>
                 <td className="hidden">
                     //Modale Edit Product
-                    {
+                    {/* {
                         `edit-product-${product?.id}` in router.query && <Modal
                             setShow={()=> router.push('/admin/products')}
                         >
                             <div className="inline-block w-full max-w-3xl mt-8 mb-20 overflow-hidden text-right align-middle transition-all transform bg-white shadow-xl rounded-lg opacity-100 scale-100">
 
                                 <h2 className="text-xl font-bold leading-tight text-gray-800 py-5 px-7  border-b">ویرایش محصول</h2>
-                                <EditProductForm product={product} mutateProducts={mutateProducts} />
+                                <EditProductForm product={product} mutateProducts={mutateProducts} router={router} />
                             </div>
 
 
                         </Modal>
-                    }
+                    } */}
 
                     {
                         showDeleteConfirmation && <DeleteConfirmation
